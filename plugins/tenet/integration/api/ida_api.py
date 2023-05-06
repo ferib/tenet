@@ -522,8 +522,8 @@ class DockableWindow(ida_kernwin.PluginForm):
             return
         self.widget.min_width = self.widget.minimumWidth()
         self.widget.max_width = self.widget.maximumWidth()
-        self.widget.setMinimumWidth(self.widget.min_width // 2)
-        self.widget.setMaximumWidth(self.widget.min_width // 2)
+        self.widget.setMinimumWidth(int(self.widget.min_width // 2))
+        self.widget.setMaximumWidth(int(self.widget.min_width // 2))
         self.widget.installEventFilter(self.__dock_filter)
 
     def show(self):
@@ -569,7 +569,7 @@ class DockableWindow(ida_kernwin.PluginForm):
 class IDADockSizeHack(QtCore.QObject):
     def eventFilter(self, obj, event):
         if event.type() == QtCore.QEvent.WindowActivate:
-            obj.setMinimumWidth(obj.min_width)
-            obj.setMaximumWidth(obj.max_width)
+            obj.setMinimumWidth(int(obj.min_width))
+            obj.setMaximumWidth(int(obj.max_width))
             obj.removeEventFilter(self)
         return False

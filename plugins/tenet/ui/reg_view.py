@@ -20,7 +20,7 @@ class RegisterView(QtWidgets.QWidget):
         # child widgets
         self.reg_area = RegisterArea(self.controller, self.model, self)
         self.idx_shell = TimestampShell(self.controller, self.model, self)
-        self.setMinimumWidth(self.reg_area.minimumWidth())
+        self.setMinimumWidth(int(self.reg_area.minimumWidth()))
 
         # layout
         layout = QtWidgets.QVBoxLayout(self)
@@ -96,8 +96,8 @@ class RegisterArea(QtWidgets.QAbstractScrollArea):
         self.setFont(font)
 
         fm = QtGui.QFontMetricsF(font)
-        self._char_width = fm.width('9')
-        self._char_height = fm.height()
+        self._char_width = int(fm.width('9'))
+        self._char_height = int(fm.height())
 
         # default to fit roughly 50 printable characters
         self._default_width = self._char_width * (self.pctx.arch.POINTER_SIZE * 2 + 16)
@@ -109,7 +109,7 @@ class RegisterArea(QtWidgets.QAbstractScrollArea):
 
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.setMinimumWidth(self._reg_pos[0] + self._default_width)
+        self.setMinimumWidth(int(self._reg_pos[0] + self._default_width))
         self.setMouseTracking(True)
 
         self._init_ctx_menu()
@@ -162,22 +162,22 @@ class RegisterArea(QtWidgets.QAbstractScrollArea):
             if reg_name == self.model.arch.IP:
                 y += self._char_height
 
-            name_rect = QtCore.QRect(0, 0, name_size.width(), name_size.height())
+            name_rect = QtCore.QRect(0, 0, int(name_size.width()), int(name_size.height()))
             name_rect.moveBottomLeft(QtCore.QPoint(name_x, y))
 
             prev_rect = QtCore.QRect(0, 0, arrow_size, arrow_size)
             next_rect = QtCore.QRect(0, 0, arrow_size, arrow_size)
             arrow_rects = [prev_rect, next_rect]
 
-            prev_x = name_x + name_size.width() + self._char_width
+            prev_x = name_x + int(name_size.width()) + self._char_width
             prev_rect.moveCenter(name_rect.center())
             prev_rect.moveLeft(prev_x)
 
-            value_x = prev_x + prev_rect.width() + self._char_width
-            value_rect = QtCore.QRect(0, 0, value_size.width(), value_size.height())
+            value_x = prev_x + int(prev_rect.width()) + self._char_width
+            value_rect = QtCore.QRect(0, 0, int(value_size.width()), int(value_size.height()))
             value_rect.moveBottomLeft(QtCore.QPoint(value_x, y))
 
-            next_x = value_x + value_size.width() + self._char_width
+            next_x = value_x + int(value_size.width()) + self._char_width
             next_rect.moveCenter(name_rect.center())
             next_rect.moveLeft(next_x)
 
@@ -258,7 +258,7 @@ class RegisterArea(QtWidgets.QAbstractScrollArea):
         Get the register field at the given cursor position.
         """
         for reg_name, field in self._reg_fields.items():
-            full_field = QtCore.QRect(field.name_rect.topLeft(), field.next_rect.bottomRight())
+            full_field = QtCore.QRect(int(field.name_rect.topLeft()), int(field.next_rect.bottomRight()))
             if full_field.contains(pos):
                 return field
         return None
@@ -498,7 +498,7 @@ class RegisterArea(QtWidgets.QAbstractScrollArea):
         assert size % 2, "Cursor triangle size must be odd"
 
         # the top point of the triangle
-        top_x = rect.x() + (0 if index else rect.width())
+        top_x = rect.x() + (0 if index else int(rect.width()))
         top_y = rect.y() + 1
 
         # bottom point of the triangle

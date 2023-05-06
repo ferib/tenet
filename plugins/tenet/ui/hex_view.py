@@ -197,7 +197,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
         self._width_aux = (self.model.num_bytes_per_line * self._char_width) + self._char_width * 2
 
         # enforce a minimum view width, to ensure all text stays visible
-        self.setMinimumWidth(self._pos_aux + self._width_aux)
+        self.setMinimumWidth(int(self._pos_aux + self._width_aux))
 
     def full_size(self):
         """
