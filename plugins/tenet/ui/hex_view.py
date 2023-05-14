@@ -182,11 +182,11 @@ class HexView(QtWidgets.QAbstractScrollArea):
         self._chars_in_line += (self.model.num_bytes_per_line // HEX_TYPE_WIDTH[self.model.hex_format])
 
         # the x position to draw the text address (left side of view)
-        self._pos_addr = self._char_width // 2
+        self._pos_addr = int(self._char_width // 2)
 
         # the width of the column, 2 nibbles (chars) per byte of a pointer
         # -- +1 for padding, (eg, 1/2 char on each side)
-        self._width_addr = (self.model.pointer_size * 2 + 1) * self._char_width
+        self._width_addr = int((self.model.pointer_size * 2 + 1) * self._char_width)
 
         # the x position and width of the hex bytes region (center section of view)
         self._pos_hex = self._width_addr + self._char_width
@@ -702,7 +702,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
         painter.drawLine(self._width_addr, event.rect().top(), self._width_addr, self.height())
 
         # paint line between hex area and auxillary area
-        line_pos = self._pos_aux
+        line_pos = int(self._pos_aux)
         painter.setPen(self._palette.hex_separator)
         painter.drawLine(line_pos, event.rect().top(), line_pos, self.height())
 
@@ -718,7 +718,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
         self._brush_navigation = QtGui.QBrush(self._palette.navigation_selection_fg)
 
         # the pixel position to start painting from
-        x, y = self._pos_hex, (line_idx + 1) * self._char_height
+        x, y = self._pos_hex, int((line_idx + 1) * self._char_height)
 
         # clamp the address from 0 to 0xFFFFFFFFFFFFFFFF
         address = self.model.address + (line_idx * self.model.num_bytes_per_line)
@@ -743,7 +743,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
 
         painter.setPen(self._default_color)
 
-        byte_base_idx = line_idx * self.model.num_bytes_per_line
+        byte_base_idx = int(line_idx * self.model.num_bytes_per_line)
         byte_idx = byte_base_idx
         stop_idx = min(len(self.model.data), byte_base_idx + self.model.num_bytes_per_line)
 
@@ -758,7 +758,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
         #
 
         byte_idx = byte_base_idx
-        x_pos_aux = self._pos_aux + self._char_width
+        x_pos_aux = int(self._pos_aux + self._char_width)
 
         if self.model.aux_format == AuxType.ASCII:
 
@@ -776,7 +776,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
                     ch = chr(ch)
 
                 painter.drawText(x_pos_aux, y, ch)
-                x_pos_aux += self._char_width
+                x_pos_aux += int(self._char_width)
 
     def _paint_hex_item(self, painter, byte_idx, stop_idx, x, y):
         """
@@ -849,7 +849,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
         # paint text selection background color / highlight
         #
 
-        x_bg = x - (self._char_width // 2) * padding
+        x_bg = int(x - (self._char_width // 2) * padding)
         y_bg = y - self._char_descent
 
         width = self._char_width * (len(text) + padding)
@@ -968,7 +968,7 @@ class HexView(QtWidgets.QAbstractScrollArea):
         # paint text
         #
 
-        painter.drawText(x, y, text)
+        painter.drawText(int(x), int(y), text)
 
     def _paint_magic(self, painter, byte_idx, stop_idx, x, y):
         """
@@ -1007,6 +1007,6 @@ class HexView(QtWidgets.QAbstractScrollArea):
         # draw the pointer
         pointer_str = ("0x%08X " % value).rjust(num_chars)
         painter.drawText(x, y, pointer_str)
-        x += num_chars * self._char_width
+        x += int(num_chars * self._char_width)
 
         return (byte_idx + self.model.pointer_size, x, y)
